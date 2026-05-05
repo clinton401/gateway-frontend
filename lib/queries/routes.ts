@@ -89,7 +89,13 @@ function mapRouteToDTO(rawRoute: Route): RouteDTO {
         recentFailureRate: undefined,
     };
 }
-
+export const getRoute = (id: string) => prisma.route.findUnique({
+    where: { id }, select: {
+        id: true,
+        path: true,
+        method: true
+    }
+});
 export async function getRouteWithLogs(id: string, logLimit = 20): Promise<{ route: RouteDTO | null, logs: RequestLogDTO[] }> {
     const [rawRoute, rawLogs] = await Promise.all([
         prisma.route.findUnique({ where: { id } }),

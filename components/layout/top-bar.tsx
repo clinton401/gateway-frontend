@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Menu } from "lucide-react";
+import {  Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { StatusDot } from "@/components/shared/status-dot";
 import { Button } from "@/components/ui/button";

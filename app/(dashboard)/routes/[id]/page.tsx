@@ -17,6 +17,7 @@ interface RouteDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+
 export async function generateMetadata({
   params,
 }: RouteDetailPageProps): Promise<Metadata> {
