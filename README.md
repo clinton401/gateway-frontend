@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🌐 GatewayOS: Control Plane (Admin Dashboard)
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-14+-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=for-the-badge&logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Upstash](https://img.shields.io/badge/Redis-Upstash-red?style=for-the-badge&logo=redis)
+![Neon](https://img.shields.io/badge/Postgres-Neon-336791?style=for-the-badge&logo=postgresql)
 
+GatewayOS is a high-performance, self-hosted API Gateway designed to manage, monitor, and protect your microservices. This repository houses the **Control Plane** — a beautifully designed Next.js Admin Dashboard used to configure routes, monitor traffic, and issue API keys. 
+
+**[🔗 Live Demo: gatewayos.vercel.app](https://gatewayos.vercel.app)**
+
+
+
+---
+
+## ✨ Enterprise-Grade Features
+
+*   **🚦 Interactive Pipeline Simulator:** A custom-built visual playground that allows developers to simulate requests through the gateway. Watch headers mutate, circuit breakers trip, and rate limiters engage in real-time before pushing configurations to production.
+*   **🛡️ Dynamic Route Configuration:** Map incoming paths to upstream microservices on the fly. Configure prefix stripping, path rewriting, and HTTP method restrictions.
+*   **🔌 Circuit Breaker Management:** Prevent cascading failures with configurable Open/Half-Open/Closed state machines. Set failure thresholds, sliding windows, and cooldown periods.
+*   **🛑 Edge Rate Limiting:** Powered by Upstash Redis, configure sliding-window rate limits per route based on IP addresses, API keys, or custom headers.
+*   **🔑 Zero-Trust Auth Enforcement:** Require standard JWTs or issue cryptographic API keys directly from the dashboard. The gateway handles validation and strips auth headers before forwarding to upstream services.
+*   **📊 Real-Time Observability:** Dedicated logs viewer and health monitors to track request latency, status codes, and traffic spikes.
+
+## 🏗️ The Architecture: Control Plane vs Data Plane
+GatewayOS uses a decoupled architecture:
+1.  **This Repository (Control Plane):** Built with Next.js App Router and React Server Components. It connects directly to the Neon Postgres database and Upstash Redis to push configuration changes and manage user state.
+2.  **[Backend Repository] (Data Plane):** A lightning-fast Node.js/Express proxy deployed on Render that reads these configurations in real-time to route actual network traffic.
+
+## 💻 Tech Stack
+*   **Framework:** Next.js (App Router, Server Actions)
+*   **Styling:** Tailwind CSS + Shadcn UI
+*   **Authentication:** Better Auth (GitHub OAuth & Email/Password)
+*   **Database ORM:** Prisma (connected to Neon Serverless Postgres)
+*   **Caching & Rate Limiting:** Upstash Redis (REST API for serverless compatibility)
+*   **Error Tracking:** Sentry
+
+## 🚀 Local Development Setup
+
+**1. Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [https://github.com/yourusername/gatewayos-frontend.git](https://github.com/yourusername/gatewayos-frontend.git)
+cd gatewayos-frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Configure Environment Variables**
+Create a `.env` file in the root directory:
+```env
+# Database & Cache
+DATABASE_URL="postgresql://..."
+UPSTASH_REDIS_REST_URL="https://..."
+UPSTASH_REDIS_REST_TOKEN="..."
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Authentication (Better Auth)
+BETTER_AUTH_SECRET="your-random-secret"
+BETTER_AUTH_URL="http://localhost:3000"
+GITHUB_CLIENT_ID="..."
+GITHUB_CLIENT_SECRET="..."
+EMAIL_USER="..."
+EMAIL_APP_PASSWORD="..."
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Application Settings
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+GATEWAY_URL="http://localhost:3001" # URL of your local Data Plane proxy
 
-## Learn More
+# Error Tracking (Optional for local dev)
+NEXT_PUBLIC_SENTRY_DSN="..."
+SENTRY_DSN="..."
+```
 
-To learn more about Next.js, take a look at the following resources:
+**3. Initialize the Database**
+Sync the Prisma schema with your Neon database:
+```bash
+npx prisma db push
+npx prisma generate
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**4. Run the Development Server**
+```bash
+npm run dev
+```
+Visit `http://localhost:3000` to access the dashboard.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 👨‍💻 Author
+**Clinton Phillips**
+*   **Portfolio:** [clintondevlab.netlify.app](https://clintondevlab.netlify.app/)
+*   **LinkedIn:** [in/clinton-phillips-316a42250](https://www.linkedin.com/in/clinton-phillips-316a42250/)
+*   **X / Twitter:** [@phillips464](https://x.com/phillips464)
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
