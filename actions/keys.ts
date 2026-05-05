@@ -48,7 +48,7 @@ export async function createApiKey(
     const auth = await checkAuth();
     if (!auth.success) return { success: false, error: auth.error || "An unexpected error occurred" };
 
-    const limiter = await checkActionRateLimit(auth.user.id);
+    const limiter = await checkActionRateLimit(auth.user?.id || "");
     if (limiter.error) return { success: false, error: limiter.error };
 
     const parsed = createKeySchema.safeParse(values);
@@ -92,7 +92,7 @@ export async function toggleApiKeyEnabled(
     const auth = await checkAuth();
     if (!auth.success) return { success: false, error: auth.error };
 
-    const limiter = await checkActionRateLimit(auth.user.id);
+    const limiter = await checkActionRateLimit(auth.user?.id || "");
     if (limiter.error) return { success: false, error: limiter.error };
 
     const key = await prisma.apiKey.findUnique({ where: { id } });
@@ -110,7 +110,7 @@ export async function deleteApiKey(
     const auth = await checkAuth();
     if (!auth.success) return { success: false, error: auth.error };
 
-    const limiter = await checkActionRateLimit(auth.user.id);
+    const limiter = await checkActionRateLimit(auth.user?.id || "");
     if (limiter.error) return { success: false, error: limiter.error };
 
     const key = await prisma.apiKey.findUnique({ where: { id } });
@@ -129,7 +129,7 @@ export async function updateApiKeyName(
     const auth = await checkAuth();
     if (!auth.success) return { success: false, error: auth.error };
 
-    const limiter = await checkActionRateLimit(auth.user.id);
+    const limiter = await checkActionRateLimit(auth.user?.id || "");
     if (limiter.error) return { success: false, error: limiter.error };
 
     if (!name.trim()) return { success: false, error: "Name is required" };
