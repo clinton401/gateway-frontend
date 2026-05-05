@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { TopBar } from "@/components/layout/top-bar";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { SidebarProvider } from "@/components/layout/sidebar-context";
+import { EmailVerificationBanner } from "@/components/layout/email-verification-banner";
 
 export default async function DashboardLayout({
   children,
@@ -19,6 +20,7 @@ export default async function DashboardLayout({
         <Sidebar user={user} />
         <div className="flex flex-1 flex-col min-w-0 lg:ml-60">
           <TopBar />
+          {!user.emailVerified && <EmailVerificationBanner />}
           <DashboardShell>{children}</DashboardShell>
         </div>
       </div>
